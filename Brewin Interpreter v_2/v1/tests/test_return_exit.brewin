@@ -1,0 +1,12 @@
+(class main
+  (method main ()
+   (begin
+    (print 1)
+    (begin
+     (return 5)
+     (print 2)
+    )
+    (print 3)
+   )
+ )
+)

@@ -1,0 +1,8 @@
+(class main
+  (method main ()
+   (begin
+    (print 1)
+    (print 2)
+   )
+ )
+)

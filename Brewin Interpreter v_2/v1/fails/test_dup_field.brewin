@@ -1,0 +1,7 @@
+(class main
+ (field a 0)
+ (field a "foo")
+ (method main ()
+	(print a)
+ )
+)

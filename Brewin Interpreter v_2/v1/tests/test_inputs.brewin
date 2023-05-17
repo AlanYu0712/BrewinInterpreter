@@ -1,0 +1,12 @@
+(class main
+ (field x "abc")
+ (field y null)
+ (method main ()
+  (begin
+   (inputs x)
+   (print x)
+   (inputs y)
+   (print y)
+  )
+ )
+)

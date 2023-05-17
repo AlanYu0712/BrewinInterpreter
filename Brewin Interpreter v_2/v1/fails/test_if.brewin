@@ -1,0 +1,5 @@
+(class main
+ (method main ()
+  (if 10 (print true) (print false))
+ )
+)

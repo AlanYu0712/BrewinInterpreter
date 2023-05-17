@@ -1,0 +1,21 @@
+# ensures that member fields are not visible to subclasses
+(class person 
+  (field string name "jane")
+)
+
+(class student inherits person
+  (field int beers 3)
+  (method int get_beers() (return beers))
+  (method string get_name() (return name))
+)
+
+(class main
+  (field student s null)
+  (method void main () 
+    (begin 
+      (set s (new student))
+      (call s get_name)
+    )
+  )
+)
+

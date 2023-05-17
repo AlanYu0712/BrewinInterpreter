@@ -1,0 +1,12 @@
+(class main
+ (method void foo ((int x))
+   (begin 
+     (let ((int y false))
+       (print y)
+     )
+   )
+ )
+ (method void main ()
+   (call me foo 10)
+ )
+)

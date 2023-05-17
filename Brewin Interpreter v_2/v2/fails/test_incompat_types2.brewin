@@ -1,0 +1,6 @@
+(class main
+ (field int a 0)
+ (method void main ()
+  (set a null)
+ )
+)

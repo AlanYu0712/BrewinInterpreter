@@ -1,0 +1,7 @@
+(class main
+ (field a 0)
+ (method foo () (return (+ a "s")))
+ (method main ()
+  (set a (call me foo))
+ )
+)

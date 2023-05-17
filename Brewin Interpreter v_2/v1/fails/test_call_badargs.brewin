@@ -1,0 +1,8 @@
+(class main
+ (method foo (a b)
+  (print a b)
+ )
+ (method main ()
+   (call me foo 5)
+ )
+)

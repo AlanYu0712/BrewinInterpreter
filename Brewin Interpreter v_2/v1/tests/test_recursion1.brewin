@@ -1,0 +1,9 @@
+(class main
+  (method fact (n)
+   (if (== n 1)
+     (return 1)
+     (return (* n (call me fact (- n 1))))
+   )
+  )
+  (method main () (print (call me fact 5)))
+)

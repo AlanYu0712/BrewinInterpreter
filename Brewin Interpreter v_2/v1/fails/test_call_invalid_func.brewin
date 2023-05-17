@@ -1,0 +1,5 @@
+(class main
+ (method main ()
+  (call me foo)
+ )
+)

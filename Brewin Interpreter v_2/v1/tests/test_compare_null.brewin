@@ -1,0 +1,10 @@
+(class main
+ (field x null)
+ (method main ()
+   (begin
+     (if (== x null) (print "yes"))
+     (set x (new main))
+     (if (!= x null) (print "yes"))
+   )
+ )
+)

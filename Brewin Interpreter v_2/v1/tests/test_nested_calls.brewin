@@ -1,0 +1,6 @@
+(class main
+  (method baz (t) (return t))
+  (method bar (s) (return (+ " " (+ (call me baz s) " "))))
+  (method foo (q r) (print q (call me bar "and") r))
+  (method main () (call me foo 5 6))
+)

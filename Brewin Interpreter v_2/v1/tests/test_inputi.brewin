@@ -1,0 +1,12 @@
+(class main
+ (field x 0)
+ (field y "test")
+ (method main ()
+  (begin
+   (inputi x)
+   (print x)
+   (inputi y)
+   (print y)
+  )
+ )
+)

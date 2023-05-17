@@ -1,0 +1,3 @@
+(class main
+  (method main () (print "ab" "cd" "ef"))
+)

@@ -1,0 +1,6 @@
+(class main
+ (field obj null)
+ (method main ()
+   (call obj foo 5)
+ ) 
+)

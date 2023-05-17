@@ -1,0 +1,13 @@
+(class main
+ (field x "abc")
+ (method main ()
+  (begin
+   (set x "def")
+   (print x)
+   (set x 20)
+   (print x)
+   (set x true)
+   (print x)
+  )
+ )
+)

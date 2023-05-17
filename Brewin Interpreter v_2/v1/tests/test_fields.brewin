@@ -1,0 +1,13 @@
+(class main
+ (field s "abc")
+ (field i 10)
+ (field b true)
+ (field x null)
+ (method main ()
+  (begin
+   (print s)
+   (print i)
+   (print b)
+  )
+ )
+)

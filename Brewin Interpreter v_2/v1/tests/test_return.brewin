@@ -1,0 +1,4 @@
+(class main
+  (method foo (q) (return q))
+  (method main () (print (call me foo 5)))
+)

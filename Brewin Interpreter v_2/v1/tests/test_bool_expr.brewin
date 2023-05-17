@@ -1,0 +1,17 @@
+(class main
+ (field t true)
+ (field f false)
+ (method main ()
+   (begin
+     (print (| true false))
+     (print (& true false))
+     (print (! true))
+     (print (| t f))
+     (print (& t f))
+     (print (! t))
+     (print (| (== t true) false))
+     (print (& (== t true) false))
+     (print (! (== t true)))
+   )
+ )
+)
