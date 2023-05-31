@@ -1,0 +1,11 @@
+(class main
+ (method void maine ()
+  (if 10 (print true) (print false))
+ )
+)
+
+(class maine
+ (method void main ()
+  (if 10 (print true) (print false))
+ )
+)

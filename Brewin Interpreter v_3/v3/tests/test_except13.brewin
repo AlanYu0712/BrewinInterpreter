@@ -1,0 +1,17 @@
+(class main
+ (method int foo () 
+   (throw "blah")
+ )
+ (method int bar ((int x)) 
+   (print x)
+ )
+
+ (method void main ()
+  (begin
+    (try
+       (call me bar (call me foo))
+       (print exception)
+    )
+  )
+ )
+)

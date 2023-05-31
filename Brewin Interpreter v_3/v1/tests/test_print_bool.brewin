@@ -1,0 +1,3 @@
+(class main
+  (method main () (print true false true))
+)

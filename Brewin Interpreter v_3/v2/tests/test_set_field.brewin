@@ -1,0 +1,9 @@
+(class main
+ (field string x "abc")
+ (method void main ()
+  (begin
+   (set x "def")
+   (print x)
+  )
+ )
+)

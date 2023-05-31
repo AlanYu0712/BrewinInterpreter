@@ -1,0 +1,11 @@
+(class main
+ (field bool t true)
+ (field bool f false)
+ (method void main ()
+   (begin
+     (print (| t f))
+     (print (& t f))
+     (print (! t))
+   )
+ )
+)

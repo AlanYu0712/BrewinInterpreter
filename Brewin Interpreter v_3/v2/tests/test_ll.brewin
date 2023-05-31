@@ -1,0 +1,47 @@
+(class node
+  (field node next null)
+  (field int value 0)
+  (method void set_val ((int v)) (set value v))
+  (method int get_val () (return value))
+  (method void set_next((node n)) (set next n))
+  (method node get_next() (return next))
+)
+
+(class linkedlist
+  (field node head null)
+  (field node temp null)
+  (method void insert ((int value)) 
+    (begin
+      (set temp (new node))
+      (call temp set_val value)
+      (call temp set_next head)
+      (set head temp)
+    )
+  )
+  (method void print () 
+    (begin 
+      (set temp head)
+      (while (!= temp null)
+        (begin
+          (print (call temp get_val))
+          (set temp (call temp get_next))
+        )
+      )
+    )
+  )
+)
+
+
+(class main
+  (field linkedlist x null)
+  (method void main () 
+    (begin 
+      (set x (new linkedlist))
+      (call x insert 10)
+      (call x insert 20)
+      (call x insert 30)
+      (call x print)
+    )
+  )
+)
+

@@ -1,0 +1,11 @@
+(class base
+ (method void foo () (call super hi) )
+)
+
+(class main
+  (method void main ()
+    (begin
+     (call (new base) foo)
+    )
+  )
+)

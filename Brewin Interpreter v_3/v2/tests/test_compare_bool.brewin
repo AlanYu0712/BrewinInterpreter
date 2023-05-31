@@ -1,0 +1,12 @@
+(class main
+ (method void main ()
+  (begin
+   (print (== true true))
+   (print (== false false))
+   (print (== true false))
+   (print (!= true false))
+   (print (!= true true))
+   (print (!= false false))
+  )
+ )
+)

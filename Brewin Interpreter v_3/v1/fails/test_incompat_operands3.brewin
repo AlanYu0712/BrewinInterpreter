@@ -1,0 +1,7 @@
+(class main
+ (method main ()
+  (begin
+		(print (+ true "abc"))
+  )
+ )
+)

@@ -1,0 +1,14 @@
+(class foo
+  (method void a () (print 5))
+)
+
+(class bar 
+  (method void a () (print 5))
+)
+
+(class main
+ (field foo a null)
+ (method void main ()
+  (set a (new bar))
+ )
+)

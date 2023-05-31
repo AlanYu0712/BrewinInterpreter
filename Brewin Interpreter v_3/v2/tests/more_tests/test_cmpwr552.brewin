@@ -1,0 +1,19 @@
+(class mammal (method person get_me () (return me))
+)
+
+(class person inherits mammal)
+
+(class student inherits person
+  (method person get_me () (return (call super get_me)))
+)
+
+(class main
+  (field student s null)
+  (field person x null)
+  (method void main ()
+    (begin
+      (set s (new student))
+      (print (== s (call s get_me)))
+    )
+  )
+)

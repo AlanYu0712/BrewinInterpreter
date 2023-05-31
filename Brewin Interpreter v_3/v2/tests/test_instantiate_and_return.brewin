@@ -1,0 +1,14 @@
+(class other_class
+  (field int a 10)
+  (method int foo ((int q) (int r)) (return (+ a (+ q r))))
+)
+
+(class main
+  (field other_class other null)
+  (method void main () 
+    (begin 
+      (set other (new other_class))
+      (print (call other foo 5 6))
+    )
+  )
+)

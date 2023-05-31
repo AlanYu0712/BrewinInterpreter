@@ -1,0 +1,26 @@
+# ensures that member methods are not visible between subclasses
+(class person 
+  (field string name "jane")
+)
+
+(class student inherits person
+  (field int beers 3)
+  (method int get_beers() (return beers))
+  (method string get_name() (return name))
+)
+
+(class prof inherits person
+  (field int coffee 4)
+  (method int get_coffee() (return coffee))
+  (method string get_name() (return name))
+)
+
+(class main
+  (field person s null)
+  (method void main () 
+    (begin 
+      (set s (new student))
+      (call s get_coffee)
+    )
+  )
+)

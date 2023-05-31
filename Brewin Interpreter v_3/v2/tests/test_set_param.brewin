@@ -1,0 +1,12 @@
+(class main
+ (method void foo ((int a) (int b))
+  (begin
+   (set a 5)
+   (set b 10)
+   (print a b)
+  )
+ )
+ (method void main ()
+  (call me foo 1000 2000)
+ )
+)

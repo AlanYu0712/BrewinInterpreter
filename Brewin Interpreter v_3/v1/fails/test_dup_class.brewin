@@ -1,0 +1,11 @@
+(class main
+ (method main ()
+  (print "hello world!")
+ )
+)
+
+(class main
+ (method blah()
+  (print "hello world!")
+ )
+)

@@ -1,0 +1,25 @@
+(class person 
+  (field string name "jane")
+  (method void say_something () (print name " says hi"))
+)
+
+(class student inherits person
+  (method void say_something ()
+    (begin
+     (print "first")
+     (call super say_something)
+     (print "second")
+    )
+  )
+)
+
+(class main
+  (field student s null)
+  (method void main () 
+    (begin 
+      (set s (new student))
+      (call s say_something)
+    )
+  )
+)
+

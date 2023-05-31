@@ -1,0 +1,8 @@
+(class main
+ (method main m () (return))
+ (method void main ()
+   (begin
+      (if (== (call me m) null) (print "null"))
+   )
+ )
+)

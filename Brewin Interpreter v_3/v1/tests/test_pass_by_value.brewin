@@ -1,0 +1,10 @@
+(class main
+ (field q 30)
+ (method foo (x) (set x 10))
+ (method main ()
+   (begin
+     (call me foo q)
+     (print q)
+   )
+ )
+)

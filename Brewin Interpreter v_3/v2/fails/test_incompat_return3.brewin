@@ -1,0 +1,15 @@
+(class animal
+  (method void talk () (print "grunt"))
+)
+
+(class dog inherits animal 
+  (method void talk () (print "woof"))
+)
+
+(class main
+ (method dog foo () 
+   (return (new animal)))
+ (method void main ()
+  (call me foo)
+ )
+)

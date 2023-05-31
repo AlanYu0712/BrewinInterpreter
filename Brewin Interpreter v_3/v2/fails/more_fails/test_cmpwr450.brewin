@@ -1,0 +1,23 @@
+#check return type 
+
+(class student
+  (field int j 2)
+)
+
+(class fun
+ (field string hi "HI")
+)
+
+(class main
+ (field student s null)
+ (field int i 4)
+ (method void main ()
+  (begin
+   (call me test)
+   (print "this worked")
+  )
+ )
+ (method fun test ()
+  (return s)
+ )
+)

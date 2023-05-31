@@ -1,0 +1,20 @@
+(class main
+ (method void foo () 
+   (throw "blah")
+ )
+ (method int bar () 
+   (begin
+    (try
+     (let ((int a 5))
+       (call me foo)
+     )
+     (print exception)
+    ) 
+    (print a) # fails
+   )
+ )
+
+ (method void main ()
+    (call me bar)
+ )
+)

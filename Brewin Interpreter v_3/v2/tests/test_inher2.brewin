@@ -1,0 +1,24 @@
+(class person 
+  (field string name "jane")
+  (method void set_name((string n)) (set name n))
+  (method string get_name() (return name))
+)
+
+(class student inherits person
+  (field int beers 3)
+  (field string student_name "studentname")
+  (method void set_beers((int g)) (set beers g))
+  (method int get_beers() (return beers))
+  (method string get_name() (return student_name))
+)
+
+(class main
+  (field student s null)
+  (method void main () 
+    (begin 
+      (set s (new student))
+      (print (call s get_name))
+    )
+  )
+)
+

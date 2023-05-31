@@ -1,0 +1,4 @@
+(class main
+  (method foo () (return 5))
+  (method main () (print (+ 10 (call me foo))))
+)

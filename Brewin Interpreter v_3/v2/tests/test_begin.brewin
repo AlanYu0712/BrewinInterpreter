@@ -1,0 +1,8 @@
+(class main
+  (method void main ()
+   (begin
+    (print 1)
+    (print 2)
+   )
+ )
+)

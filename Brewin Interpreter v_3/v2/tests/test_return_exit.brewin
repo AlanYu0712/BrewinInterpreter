@@ -1,0 +1,12 @@
+(class main
+  (method void main ()
+   (begin
+    (print 1)
+    (begin
+     (return)
+     (print 2)
+    )
+    (print 3)
+   )
+ )
+)

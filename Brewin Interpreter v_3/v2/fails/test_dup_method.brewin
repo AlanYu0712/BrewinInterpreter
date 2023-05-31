@@ -1,0 +1,8 @@
+(class main
+ (method void main ()
+  (print "hi")
+ )
+ (method void main ()
+	(print "bye")
+ )
+)

@@ -1,0 +1,26 @@
+#checks that methods are inherited voer 1-2 degrees
+
+(class base
+  (method void c () (print "blurb"))
+)
+
+(class foo inherits base
+  (method void a () (print "foo"))
+  (method void b () (call me a))
+)
+
+(class bar inherits foo 
+  (method void a () (print "bar"))
+)
+
+(class main
+  (field foo f null)
+  (method void main () 
+    (begin 
+      (set f (new bar))
+      (call f b)
+      (call f c)
+    )
+  )
+)
+

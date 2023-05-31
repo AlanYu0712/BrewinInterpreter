@@ -1,0 +1,15 @@
+(class animal 
+  (method void talk () (print "grunt"))
+)
+
+(class main
+  (method animal foo () (return null))
+  (field animal a null)
+  (method void main ()
+    (begin
+      (set a (new animal))
+      (set a (call me foo)) 
+      (if (== a null) (print "yes") (print "no"))
+    )
+  )
+)

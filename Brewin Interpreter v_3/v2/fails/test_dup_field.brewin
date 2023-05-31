@@ -1,0 +1,7 @@
+(class main
+ (field int a 0)
+ (field string a "foo")
+ (method void main ()
+	(print a)
+ )
+)

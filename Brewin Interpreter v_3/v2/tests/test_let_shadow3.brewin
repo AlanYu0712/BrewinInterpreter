@@ -1,0 +1,21 @@
+(class main
+ (field int x 10)
+ (method void foo ()
+   (begin 
+     (print x)
+     (let ((string x "foo"))
+       (begin
+          (print x)
+          (set x "bar")
+          (print x)
+       )
+     )
+     (print x)
+     (set x 20)
+     (print x)
+   )
+ )
+ (method void main ()
+   (call me foo)
+ )
+)

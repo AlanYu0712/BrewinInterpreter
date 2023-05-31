@@ -1,0 +1,11 @@
+
+(class main
+ (method main get_me() (return me))
+ (method void talk() (print "hi"))
+ (method void main ()
+  (let ((main x null))
+     (set x (call me get_me))
+     (call x talk) 
+  )
+ )
+)

@@ -1,0 +1,13 @@
+(tclass foo (field_type)
+  (field field_type value)
+  (method void set_val ((field_type v)) (set value v))
+)
+
+(class main
+  (method void main () 
+    (let ((foo@int x null))
+         (set x (new foo@bool))
+    )
+  )
+)
+

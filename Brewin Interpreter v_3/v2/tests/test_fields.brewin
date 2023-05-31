@@ -1,0 +1,12 @@
+(class main
+ (field string s "abc")
+ (field int i 10)
+ (field bool b true)
+ (method void main ()
+  (begin
+   (print s)
+   (print i)
+   (print b)
+  )
+ )
+)

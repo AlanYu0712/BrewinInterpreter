@@ -1,0 +1,5 @@
+(class main
+ (method void main ()
+  (call me foo)
+ )
+)

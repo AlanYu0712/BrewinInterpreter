@@ -1,0 +1,11 @@
+(class main
+ (method void main ()
+  (print "hello world!")
+ )
+)
+
+(class main
+ (method void blah()
+  (print "hello world!")
+ )
+)

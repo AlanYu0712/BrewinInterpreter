@@ -1,0 +1,13 @@
+(class main
+ (field main x null)
+ (field main y null)
+ (method void main ()
+   (begin
+     (set x (new main))
+     (set y x)
+     (if (== x y) (print "yes"))
+     (set y (new main))
+     (if (!= x y) (print "yes"))
+   )
+ )
+)

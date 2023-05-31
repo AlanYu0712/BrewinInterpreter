@@ -1,0 +1,17 @@
+(class foo 
+ (method void f ((int x)) (print x))
+)
+(class bar inherits foo
+ (method void f ((int x) (int y)) (print x " " y))
+)
+
+(class main
+ (field bar b null)
+ (method void main ()
+   (begin
+     (set b (new bar))
+     (call b f 10)
+     (call b f 10 20)
+   )
+ )
+)

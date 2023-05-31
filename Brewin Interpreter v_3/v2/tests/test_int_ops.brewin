@@ -1,0 +1,11 @@
+(class main
+ (method void main ()
+  (begin
+		(print (+ 100 2))
+    (print (- 100 2))
+    (print (* 100 2))
+    (print (/ 100 2))
+    (print (% 100 6))
+  )
+ )
+)

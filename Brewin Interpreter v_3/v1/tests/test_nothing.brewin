@@ -1,0 +1,9 @@
+(class main
+ (field a null)
+ (method main ()
+   (begin
+     (set a 5)
+     (print a)
+   )
+ )
+)

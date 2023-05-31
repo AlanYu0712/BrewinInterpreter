@@ -1,0 +1,4 @@
+(class main
+  (method void foo ((int q) (int r)) (print q " and " r))
+  (method void main () (call me foo 5 6))
+)

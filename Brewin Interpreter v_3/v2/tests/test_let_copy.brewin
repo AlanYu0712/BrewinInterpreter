@@ -1,0 +1,20 @@
+(class main
+ (method void foo ((int x))
+   (begin 
+     (print x)
+     (let ((int y 5))
+       (begin
+          (set y x)
+          (set y 20)
+          (print y)
+          (print x)
+       )
+       (print x)
+     )
+     (print x)
+   )
+ )
+ (method void main ()
+   (call me foo 10)
+ )
+)

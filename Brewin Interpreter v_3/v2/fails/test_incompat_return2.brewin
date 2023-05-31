@@ -1,0 +1,13 @@
+(class cat
+  (method void meow () (print "meow"))
+)
+(class dog 
+  (method void bark () (print "ruff"))
+)
+(class main
+ (method cat foo () 
+   (return (new dog)))
+ (method void main ()
+  (call me foo)
+ )
+)

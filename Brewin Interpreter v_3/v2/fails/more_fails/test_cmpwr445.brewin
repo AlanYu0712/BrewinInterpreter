@@ -1,0 +1,8 @@
+#check return type when null
+
+(class main
+ (method int i () (return null))
+ (method void main () 
+  (print (call me i))
+ )
+)

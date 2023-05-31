@@ -1,0 +1,27 @@
+(class person
+ (field int i 0)
+ (field string s "hi")
+ 
+  (method person f () 
+  ( begin
+    (set i 2)
+    (set s (+ s " there"))
+    (return me)
+  ) 
+ )
+
+ (method void print_s () (print s) )
+ 
+)
+
+(class main
+ (field person p null)
+ (field person h null)
+ (method void main ()
+  (begin
+  (set p (new person))
+  (set h (call p f))
+  (call h print_s)
+  )
+ )
+)

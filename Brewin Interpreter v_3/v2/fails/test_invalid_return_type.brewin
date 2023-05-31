@@ -1,0 +1,4 @@
+(class main
+  (method blarf foo ((int x)) (print x))
+  (method void main () (print 5))
+)

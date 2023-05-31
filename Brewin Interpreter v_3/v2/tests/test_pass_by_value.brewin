@@ -1,0 +1,10 @@
+(class main
+ (field int q 30)
+ (method void foo ((int x)) (set x 10))
+ (method void main ()
+   (begin
+     (call me foo q)
+     (print q)
+   )
+ )
+)

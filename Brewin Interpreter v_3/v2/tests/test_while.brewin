@@ -1,0 +1,19 @@
+(class main
+ (field int x 0)
+ (method void main ()
+  (begin
+    (while (< x 2)
+      (begin 
+        (print x)
+        (set x (+ x 1))
+      )
+    )
+    (while false 
+      (print x)
+    )
+    (while (< x 0)
+     (print x)
+    )
+  )
+ )
+)

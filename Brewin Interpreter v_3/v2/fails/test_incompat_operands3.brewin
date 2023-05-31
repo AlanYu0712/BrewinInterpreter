@@ -1,0 +1,7 @@
+(class main
+ (method void main ()
+  (begin
+		(print (+ true "abc"))
+  )
+ )
+)

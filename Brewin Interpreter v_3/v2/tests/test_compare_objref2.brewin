@@ -1,0 +1,19 @@
+# check comparison with subclass first superclass second
+
+(class foo
+  (method void bar () (print 5))
+)
+(class bar inherits foo
+  (method void bar () (print 6))
+)
+
+(class main
+ (field foo x null)
+ (field bar y null)
+ (method void main ()
+   (begin
+     (if (== y x) (print "yes"))
+     (if (== x y) (print "yes"))
+   )
+ )
+)

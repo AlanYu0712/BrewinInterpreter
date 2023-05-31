@@ -1,0 +1,6 @@
+(class main
+ (method void foo ((goon q) (int x)) (print x))
+ (method void main ()
+   (call me foo 5 6)
+ )
+)

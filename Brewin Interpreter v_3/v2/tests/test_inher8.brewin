@@ -1,0 +1,35 @@
+(class organism 
+  (method void say_something () (print "blurb"))
+)
+
+(class person inherits organism
+  (field string name "jane")
+  (method void say_something () (print name " says hi"))
+)
+
+(class student inherits person
+  (method void say_something ()
+    (begin
+     (print "first")
+     (call super say_something)
+     (print "second")
+    )
+  )
+)
+
+(class main
+  (field organism o null)
+  (method void foo ((organism o))
+    (call o say_something))
+  (method void main () 
+    (begin 
+      (set o (new student))
+      (call me foo o)
+      (set o (new person))
+      (call me foo o)
+      (set o (new organism))
+      (call me foo o)
+    )
+  )
+)
+

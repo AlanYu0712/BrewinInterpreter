@@ -1,0 +1,5 @@
+(class main
+ (method void main ()
+  (while 10 (begin (print true) (print false)))
+ )
+)

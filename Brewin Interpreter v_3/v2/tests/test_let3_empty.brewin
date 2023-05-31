@@ -1,0 +1,8 @@
+(class main
+  (method void main ()
+   (let ()
+    (print -1)
+    (print "hello")
+   )
+ )
+)

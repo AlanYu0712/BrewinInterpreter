@@ -1,0 +1,11 @@
+(class animal
+  (method void talk () (print "grunt"))
+)
+
+(class main
+ (method void foo () 
+   (return (new animal)))
+ (method void main ()
+  (call me foo)
+ )
+)

@@ -1,0 +1,28 @@
+#from post 522, prompted by post 495
+
+(class mammal
+ (method void foo () (print "m") )
+ (method void bar () (call me foo) )
+)
+
+(class person inherits mammal
+ (method void foo () (print "p") )
+ (method void bar () (call me foo) )
+ (method void zig () (call super foo))
+)
+
+(class student inherits person
+ (method void foo () (print "s") )
+ #(method void zig () (call super foo)) 
+)
+
+(class main
+  (field person p null) 
+  (method void main ()
+    (begin
+     (set p (new student))
+     (call p zig)
+     (call p bar)
+    )
+  )
+)
