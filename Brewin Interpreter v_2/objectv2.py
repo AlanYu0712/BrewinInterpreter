@@ -3,10 +3,13 @@ Module handling the operations of an object. This contains the meat
 of the code to execute various instructions.
 """
 
-from env_v1 import EnvironmentManager
+from env_v2 import EnvironmentManager
 from intbase import InterpreterBase, ErrorType
-from type_valuev1 import create_value
-from type_valuev1 import Type, Value
+from type_valuev2 import create_value
+from type_valuev2 import Type, Value
+from type_variablev2 import  Variable
+from type_variablev2 import create_variable
+from type_methodv2 import convertType
 
 
 class ObjectDef:
@@ -21,6 +24,8 @@ class ObjectDef:
         self.trace_output = trace_output
         self.__map_fields_to_values()
         self.__map_method_names_to_method_definitions()
+        self.__initialize_blood_line()
+        self.__initialize_parent()
         self.__create_map_of_operations_to_lambdas()  # sets up maps to facilitate binary and unary operations, e.g., (+ 5 6)
 
     def call_method(self, method_name, actual_params, line_num_of_caller):
@@ -36,8 +41,13 @@ class ObjectDef:
                 "unknown method " + method_name,
                 line_num_of_caller,
             )
-        method_info = self.methods[method_name]
-        if len(actual_params) != len(method_info.formal_params):
+            
+        method_infos = self.methods[method_name]
+        method_info = None
+        for i in method_infos:
+            if len(actual_params) == len(i.formal_params):
+                method_info = i
+        if method_info is None:
             self.interpreter.error(
                 ErrorType.TYPE_ERROR,
                 "invalid number of parameters in call to " + method_name,
@@ -46,16 +56,64 @@ class ObjectDef:
         env = (
             EnvironmentManager()
         )  # maintains lexical environment for function; just params for now
-        for formal, actual in zip(method_info.formal_params, actual_params):
-            env.set(formal, actual)
+        for formal, actual in zip(method_info.formal_params, actual_params): #TODO(done): implement type checking
+            created_formal = create_variable(formal[0], formal[1])
+            if created_formal.type() != actual.type(): #TODO(done): need to deal with classes and null
+                self.interpreter.error(
+                ErrorType.NAME_ERROR,
+                "invalid type assigned at " + method_name + " for parameter " + created_formal.name(),
+                line_num_of_caller,
+                )
+            if created_formal.type()==Type.CLASS and actual.value() is not None:
+                if created_formal.class_name() not in actual.value().get_blood_line():
+                    self.interpreter.error(
+                    ErrorType.NAME_ERROR,
+                    "invalid type assigned at " + method_name + " for parameter " + created_formal.name(),
+                    line_num_of_caller,
+                    )
+            env.init_set(created_formal.name(),[actual,created_formal.class_name()])
         # since each method has a single top-level statement, execute it.
         status, return_value = self.__execute_statement(env, method_info.code)
         # if the method explicitly used the (return expression) statement to return a value, then return that
         # value back to the caller
-        if status == ObjectDef.STATUS_RETURN:
+        if status == ObjectDef.STATUS_RETURN: #TODO(y): Deal with classes
+            if method_info.return_type[0] != return_value.type(): #TODO(done): deal with classes
+                if return_value.type()!= Type.NOTHING:
+                    self.interpreter.error(
+                    ErrorType.TYPE_ERROR,
+                    "invalid return type at " + method_name,
+                    line_num_of_caller,
+                    )
+                else:
+                    r_type = method_info.return_type[0] 
+                    if r_type == Type.INT:
+                        return_value= create_value('0')
+                    elif r_type == Type.BOOL:
+                        return_value = create_value('false')
+                    elif r_type == Type.STRING:
+                        return_value = create_value('""')  
+                    elif r_type == Type.CLASS:
+                        return_value = create_value('null')                                        
+            if method_info.return_type[0]==Type.CLASS and return_value.value() is not None:
+                if method_info.return_type[1] not in return_value.value().get_blood_line():
+                     self.interpreter.error(
+                    ErrorType.TYPE_ERROR,
+                    "invalid return type at " + method_name,
+                    line_num_of_caller,
+                    )   
+                    
             return return_value
         # The method didn't explicitly return a value, so return a value of type nothing
-        return Value(InterpreterBase.NOTHING_DEF)
+        r_type = method_info.return_type 
+        if r_type == Type.INT:
+            return_value= create_value('0')
+        elif r_type == Type.BOOL:
+            return_value = create_value('false')
+        elif r_type == Type.STRING:
+            return_value = create_value('""')
+        elif r_type == Type.CLASS:
+            return_value = create_value('null')  
+        return return_value
 
     def __execute_statement(self, env, code):
         """
@@ -86,10 +144,77 @@ class ObjectDef:
             return self.__execute_input(env, code, False)
         if tok == InterpreterBase.PRINT_DEF:
             return self.__execute_print(env, code)
+        if tok == InterpreterBase.LET_DEF:
+            return self.__execute_let(env,code)
 
         self.interpreter.error(
             ErrorType.SYNTAX_ERROR, "unknown statement " + tok, tok.line_num
         )
+
+    #LET
+    def __execute_let(self, env, code):
+        loc_var_defined_so_far = set()
+        shadows = {}
+        for loc_var in code[1]:
+            if loc_var[1] in loc_var_defined_so_far: #check if duplicate
+                self.interpreter.error(
+                    ErrorType.NAME_ERROR,
+                    "duplicated local vairable "+loc_var[1],
+                    code[0].line_num
+                )
+            #type_checking
+            created_value = create_value(loc_var[2])
+            created_loc_var = create_variable(loc_var[0],loc_var[1])
+            if created_loc_var.type() != created_value.type(): #TODO(done): need to deal with classes
+                self.interpreter.error(
+                    ErrorType.TYPE_ERROR,
+                    "invalid type assigned to "+created_loc_var.name(),
+                    code[0].line_num
+                    )
+            if created_loc_var.type()==Type.CLASS and created_value.value() is not None:
+                if created_loc_var.class_name() not in created_value.value().get_blood_line():
+                    self.interpreter.error(
+                    ErrorType.TYPE_ERROR,
+                    "invalid type assigned to "+created_loc_var.name(),
+                    code[0].line_num
+                    )
+            
+            
+            #dealing with shadowing
+            origin_val = env.get_all(created_loc_var.name())
+            if origin_val is not None:
+                shadows[created_loc_var.name()] = origin_val
+            
+            #update loc_var
+            loc_var_defined_so_far.add(created_loc_var.name())
+            env.init_set(created_loc_var.name(),[created_value,created_loc_var.class_name()])
+            
+        
+        for statement in code[2:]:
+            status, return_value = self.__execute_statement(env, statement)
+            if status == ObjectDef.STATUS_RETURN:
+                
+                # destructing local variables and recovering shadowed param
+                for loc_var in loc_var_defined_so_far:
+                    env.del_item(loc_var)
+                for param in shadows:
+                    env.init_set(param, shadows[param])
+                
+                return (
+                    status,
+                    return_value,
+                )  # could be a valid return of a value or an error
+        # if we run thru the entire block without a return, then just return proceed
+        # we don't want the calling block to exit with a return
+        
+        # destructing local variables and recovering shadowed param
+        for loc_var in loc_var_defined_so_far:
+            env.del_item(loc_var)
+        for param in shadows:
+            env.init_set(param, shadows[param])
+        return ObjectDef.STATUS_PROCEED, None
+
+
 
     # (begin (statement1) (statement2) ... (statementn))
     def __execute_begin(self, env, code):
@@ -162,15 +287,45 @@ class ObjectDef:
                 ErrorType.TYPE_ERROR, "can't assign to nothing " + var_name, line_num
             )
         param_val = env.get(var_name)
+        var_class_name = env.get_all(var_name)
         if param_val is not None:
-            env.set(var_name, value)
+            if param_val.type() != value.type(): #TODO(done): need to deal with classes and null
+                self.interpreter.error(
+                ErrorType.TYPE_ERROR,
+                "invalid type assigned to "+var_name,
+                line_num
+                )
+            if param_val.type()==Type.CLASS and value.value() is not None:
+                if var_class_name[1] not in value.value().get_blood_line():
+                    self.interpreter.error(
+                    ErrorType.TYPE_ERROR,
+                    "invalid type assigned to "+var_name,
+                    line_num
+                    )
+            env.set(var_name, value) #TODO(done): implement type checking
             return
 
+        
         if var_name not in self.fields:
             self.interpreter.error(
                 ErrorType.NAME_ERROR, "unknown variable " + var_name, line_num
             )
-        self.fields[var_name] = value
+        var_type = self.fields[var_name][0].type()
+        var_class_name = self.fields[var_name][1]
+        if var_type != value.type(): #TODO(done): need to deal with classes and null
+            self.interpreter.error(
+            ErrorType.TYPE_ERROR,
+            "invalid type assigned to "+var_name,
+            line_num
+            )
+        if var_type==Type.CLASS and value.value() is not None:
+                if  var_class_name not in value.value().get_blood_line():
+                    self.interpreter.error(
+                    ErrorType.TYPE_ERROR,
+                    "invalid type assigned to "+var_name,
+                    line_num
+                    )
+        self.fields[var_name][0] = value #TODO(done): implement type checking
 
     # (if expression (statement) (statement) ) where expresion could be a boolean constant (e.g., true), member
     # variable without ()s, or a boolean expression in parens, like (> 5 a)
@@ -220,14 +375,15 @@ class ObjectDef:
     # like (+ 5 6), (+ "abc" "def"), (> a 5), method calls (e.g., (call me foo)), or instantiations (e.g., new dog_class)
     def __evaluate_expression(self, env, expr, line_num_of_statement):
         if not isinstance(expr, list):
+            # dealing with classes (for later)
             # locals shadow member variables
             val = env.get(expr)
             if val is not None:
                 return val
             if expr in self.fields:
-                return self.fields[expr]
+                return self.fields[expr][0]
             # need to check for variable name and get its value too
-            value = create_value(expr)
+            value = create_value(expr) #if expr is straight up a value (Alan)
             if value is not None:
                 return value
             self.interpreter.error(
@@ -264,12 +420,21 @@ class ObjectDef:
                         line_num_of_statement,
                     )
                 return self.binary_ops[Type.BOOL][operator](operand1, operand2)
-            if operand1.type() == operand2.type() and operand1.type() == Type.CLASS:
+            if operand1.type() == operand2.type() and operand1.type() == Type.CLASS: #TODO:class type check
                 if operator not in self.binary_ops[Type.CLASS]:
                     self.interpreter.error(
                         ErrorType.TYPE_ERROR,
                         "invalid operator applied to class",
                         line_num_of_statement,
+                    )
+                if operand1.value() is not None and operand2.value() is not None:
+                    o1_blood_line = operand1.value().get_blood_line()
+                    o2_blood_line = operand2.value().get_blood_line()
+                    if o1_blood_line[0] not in o2_blood_line or o2_blood_line[0] not in o1_blood_line:
+                        self.interpreter.error(
+                             ErrorType.TYPE_ERROR,
+                            "invalid operator applied to class",
+                            line_num_of_statement,
                     )
                 return self.binary_ops[Type.CLASS][operator](operand1, operand2)
             # error what about an obj reference and null
@@ -308,6 +473,8 @@ class ObjectDef:
         obj_name = code[1]
         if obj_name == InterpreterBase.ME_DEF:
             obj = self
+        elif obj_name == InterpreterBase.SUPER_DEF: #by barista, this should not take precedence than else
+            obj = self.super
         else:
             obj = self.__evaluate_expression(
                 env, obj_name, line_num_of_statement
@@ -327,12 +494,40 @@ class ObjectDef:
     def __map_method_names_to_method_definitions(self):
         self.methods = {}
         for method in self.class_def.get_methods():
-            self.methods[method.method_name] = method
+            if type(method.return_type) is not Type and type(method.return_type) is not tuple:
+                method.return_type = convertType(method.return_type)
+            if method.method_name in self.methods:
+                self.methods[method.method_name].append(method)
+            else:
+                self.methods[method.method_name] = [method]
 
     def __map_fields_to_values(self):
         self.fields = {}
         for field in self.class_def.get_fields():
-            self.fields[field.field_name] = create_value(field.default_field_value)
+            created_val = create_value(field.default_field_value)
+            created_field = create_variable(field.field_type, field.field_name)
+            if created_field.type() != created_val.type(): #TODO(nn): need to deal with classes and null
+                self.interpreter.error(
+                ErrorType.TYPE_ERROR,
+                "invalid type assigned to "+created_field.name(),
+                )
+            self.fields[created_field.name()] = [created_val,created_field.class_name()]
+            
+    def __initialize_parent(self):
+        bloodline = self.class_def.get_blood_line()
+        if len(bloodline) > 1:
+            self.super = self.interpreter.instantiate(bloodline[1], None)
+        else:
+            self.super = None
+            
+    def __initialize_blood_line(self):
+        self.blood_line = self.class_def.get_blood_line()
+        
+    def get_blood_line(self):
+        return self.blood_line
+        
+            
+        
 
     def __create_map_of_operations_to_lambdas(self):
         self.binary_op_list = [

@@ -20,6 +20,12 @@ class EnvironmentManager:
         Get data associated with variable name.
         """
         if symbol in self.environment:
+            return self.environment[symbol][0]
+
+        return None
+    
+    def get_all(self,symbol):
+        if symbol in self.environment:
             return self.environment[symbol]
 
         return None
@@ -28,4 +34,11 @@ class EnvironmentManager:
         """
         Set data associated with a variable name.
         """
+        self.environment[symbol][0] = value
+
+    def init_set(self,symbol,value):
         self.environment[symbol] = value
+    
+    def del_item(self, symbol):
+        if symbol in self.environment:
+            del self.environment[symbol]

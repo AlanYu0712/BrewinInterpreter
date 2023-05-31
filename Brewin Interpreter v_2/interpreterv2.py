@@ -3,10 +3,10 @@ The module that brings it all together! We intentionally keep this as small as p
 delegating functionality to various modules.
 """
 
-from classv1 import ClassDef
+from classv2 import ClassDef
 from intbase import InterpreterBase, ErrorType
 from bparser import BParser
-from objectv1 import ObjectDef
+from objectv2 import ObjectDef
 
 
 class Interpreter(InterpreterBase):
@@ -74,3 +74,63 @@ class Interpreter(InterpreterBase):
                         item[0].line_num,
                     )
                 self.class_index[item[1]] = ClassDef(item, self)
+
+
+def test():
+    program_source = [
+                    '(class parent',
+                    '(field string k "Alan")',
+                    '(method int foo ((int param))',
+                    ' (return (+ param 50000))',
+                    ') #end of foo method',
+                    '(method int f ((int param))',
+                    '  (return (- 0 param))',
+                    ')'
+                    ') #end of class parent',
+
+                    '(class test',
+                    '(method void foo ()',
+                    '   (print "im happy")',
+                    ')',
+                    ')'
+        
+                    '(class main inherits parent',
+                    '(field string a "Josh Zhang")',
+                    '(field int b 3)',
+                    '(field bool c true)',
+                    '(field main t null)',
+                    '(field main t1 null)'
+                    '(field parent p null)',
+                    '(method void main ()',
+                    '   (begin',
+                    '       (print (== t null))',
+                    '       (print b)',
+                    '       (let ((bool b false))',
+                    '           (print b))',
+                    '       (print b)',
+                    '       (set t (new main))',
+                    '       (set t1 (new main))',
+                    '       (print (== t t1))',
+                    '       #(print k)',
+                    '       (set b (call me foo b 100))',
+                    '       (print b)',
+                    '       (print (call me foo b))',
+                    '       (print "new test")',
+                    '       (set p (new parent))',
+                    '       (call me poly t)'
+                    '       (print (call me foo b 100))'
+                    '   ) #end of begin',
+                    ') #end of main method',
+                    '(method int foo ((int param) (int param2))',
+                    ' (return)',
+                    ') #end of foo method',
+                    
+                    '(method void poly ((parent param))',
+                    '   (print "Yeah Poly works!"))',
+                    
+                    ') #end of class'
+                    ]
+    i = Interpreter()
+    i.run(program_source)
+
+test()
